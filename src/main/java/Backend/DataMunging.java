@@ -7,7 +7,9 @@ import java.io.*;
 
 public class DataMunging {
     //Pulls JSON file and returns a Dataset object full of Job objects.
+    //If JSON file does not exist, creates the file and makes it empty.
     public static Dataset pullJSON(String filename) {
+        File file = new File(filename);
         Gson gson = new Gson();
         JsonReader reader;
         Dataset data = null;
@@ -17,9 +19,23 @@ public class DataMunging {
             reader.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            try {
+                file.createNewFile();
+                pullJSON(filename);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
+            try {
+                file.createNewFile();
+                pullJSON(filename);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
+
         return data;
     }
     //Pushes a dataset into JSON format.
