@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.TimerTask;
+import java.util.Timer;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -36,9 +38,11 @@ public class MainScreen{
     private Job activeJob;
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private Timer timer;
 
     private double minutes = 0;
     private double finishedTimerMinutes = 0;
+
 
     public MainScreen() {
         jobList = new DefaultListModel<String>();
@@ -156,29 +160,21 @@ public class MainScreen{
     }
 
     public void startTimer() {
-        Runnable increment = new Runnable() {
+
+        timer = new Timer();
+        TimerTask task = new TimerTask() {
             @Override
             public void run() {
                 if (activeJobSession) {
                     minutes++;
                     updateTimerCount();
+                } else {
+                    timer.cancel();
                 }
             }
         };
 
-        ScheduledFuture<?> incrementScheduleHandler = scheduler.scheduleAtFixedRate(increment,
-                0, 1, SECONDS);
-
-        Runnable stopper = new Runnable() {
-            public void run() {
-                if(!activeJobSession){
-                    incrementScheduleHandler.cancel(true);
-                    System.out.println("Runnables canceled");
-                }
-            }
-        };
-
-        scheduler.schedule(stopper, 1,  SECONDS);
+        timer.schedule(task, 1000, 1000);
     }
 
     public static Boolean getActiveJobSession() {
@@ -195,4 +191,5 @@ public class MainScreen{
         mainScreen.setPathLink(main);
 
     }
+
 }
