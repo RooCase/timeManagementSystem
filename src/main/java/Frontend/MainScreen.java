@@ -108,6 +108,13 @@ public class MainScreen{
                 }
             }
         });
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                minutes = 0;
+                updateTimerCount();
+            }
+        });
     }
 
 
@@ -160,8 +167,8 @@ public class MainScreen{
     }
 
     public void startTimer() {
-
         timer = new Timer();
+
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
