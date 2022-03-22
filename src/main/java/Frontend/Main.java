@@ -14,6 +14,7 @@ public class Main {
     private Dataset data;
 
     public Main(MainScreen inputMain){
+        pushJSON(refreshRandomData());
         mainScreenStartup(inputMain);
     }
 
@@ -52,6 +53,18 @@ public class Main {
         mainScreen.dataComboBoxRefresh(dataSetNames);
     }
 
+
+    public void addData(Job newJob){
+        data.add(newJob);
+        pushJSON(data);
+        dropdownData();
+    }
+    public void deleteData(Job deleteJob){
+        data.remove(deleteJob);
+        pushJSON(data);
+        dropdownData();
+    }
+
     //Test code that creates random datasets
     public Dataset refreshRandomData(){
         Dataset data = new Dataset();
@@ -65,16 +78,7 @@ public class Main {
         return data;
     }
 
-    public void addData(Job newJob){
-        data.add(newJob);
-        pushJSON(data);
-        dropdownData();
-    }
-    public void deleteData(Job deleteJob){
-        data.remove(deleteJob);
-        pushJSON(data);
-        dropdownData();
-    }
+
 
 
 

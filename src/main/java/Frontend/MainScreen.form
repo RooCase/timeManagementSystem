@@ -48,20 +48,20 @@
           <text value=""/>
         </properties>
       </component>
-      <component id="bb59c" class="javax.swing.JButton" binding="button4" default-binding="true">
+      <component id="bb59c" class="javax.swing.JButton" binding="addTimeToJobButton">
         <constraints>
           <grid row="6" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Button"/>
+          <text value="Add Time To Job"/>
         </properties>
       </component>
-      <component id="595d0" class="javax.swing.JButton" binding="button1" default-binding="true">
+      <component id="595d0" class="javax.swing.JButton" binding="clearButton" default-binding="true">
         <constraints>
           <grid row="6" column="4" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Button"/>
+          <text value="Clear"/>
         </properties>
       </component>
       <component id="1c410" class="javax.swing.JButton" binding="startButton" default-binding="true">

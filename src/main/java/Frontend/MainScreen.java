@@ -2,7 +2,6 @@ package Frontend;
 
 import Backend.DataMunging;
 import Backend.Job;
-import Backend.Timer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,10 +12,7 @@ import java.awt.event.ItemListener;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class MainScreen{
@@ -28,19 +24,21 @@ public class MainScreen{
     private JButton deleteButton;
     private JTextField timerTextField;
     private JList jobDetails;
-    private JButton refresherButton;
+    private JButton addTimeToJobButton;
     private JTextArea jobInformationTextArea;
-    private JButton button1;
+    private JButton clearButton;
     private JButton startButton;
-    private JButton button4;
     private JTextField textField1;
     private JTextField timerTimeTextField = textField1;
 
-    private static boolean activeJobSession;
-    private Timer timer;
+    private static boolean activeJobSession = false;
     private Main pathLink;
     private Job activeJob;
-    private double minutes;
+
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+    private double minutes = 0;
+    private double finishedTimerMinutes = 0;
 
     public MainScreen() {
         jobList = new DefaultListModel<String>();
@@ -81,19 +79,28 @@ public class MainScreen{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                if(startButton.getText() == "Start"){
+                if(!activeJobSession){
                     startButton.setText("Stop");
                     activeJobSession = true;
-
+                    startTimer();
                 }else{
                     activeJobSession = false;
                     startButton.setText("Start");
-                    try {
+                    finishedTimerMinutes = 0;
+/*                    try {
                         TimeUnit.SECONDS.sleep(1);
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
-                    }
-                    System.out.println(Timer.getMinutes());
+                    }*/
+                }
+            }
+        });
+
+        addTimeToJobButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(activeJob != null){
+                    activeJob.setTime(activeJob.getTime() + finishedTimerMinutes);
                 }
             }
         });
@@ -148,6 +155,32 @@ public class MainScreen{
         frame.repaint();
     }
 
+    public void startTimer() {
+        Runnable increment = new Runnable() {
+            @Override
+            public void run() {
+                if (activeJobSession) {
+                    minutes++;
+                    updateTimerCount();
+                }
+            }
+        };
+
+        ScheduledFuture<?> incrementScheduleHandler = scheduler.scheduleAtFixedRate(increment,
+                0, 1, SECONDS);
+
+        Runnable stopper = new Runnable() {
+            public void run() {
+                if(!activeJobSession){
+                    incrementScheduleHandler.cancel(true);
+                    System.out.println("Runnables canceled");
+                }
+            }
+        };
+
+        scheduler.schedule(stopper, 1,  SECONDS);
+    }
+
     public static Boolean getActiveJobSession() {
         return activeJobSession;
     }
@@ -160,24 +193,6 @@ public class MainScreen{
         MainScreen mainScreen = new MainScreen();
         Main main = new Main(mainScreen);
         mainScreen.setPathLink(main);
-
-    }
-
-    private void timer(){
-        final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        final ScheduledExecutorService stopper = Executors.newScheduledThreadPool(1);
-
-        minutes = 0;
-        Runnable increment = () -> minutes++; updateTimerCount();
-        ScheduledFuture<?> scheduleHandle = scheduler.scheduleAtFixedRate(increment,
-                1, 1, SECONDS);
-        scheduler.schedule(new Runnable() {
-            public void run() {
-                if(activeJobSession){
-                    scheduleHandle.cancel(true);
-                }
-            }
-        }, 1,  SECONDS);
 
     }
 }

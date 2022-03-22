@@ -48,6 +48,7 @@ public class Dataset{
         }
         return null;
     }
+
     public void remove(Job job){
         if(jobs.remove(this.fetch(job.getTitle())))
             System.out.println(job.getTitle() + " was removed");
