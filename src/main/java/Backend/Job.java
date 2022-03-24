@@ -65,6 +65,7 @@ public class Job {
 
     public void setTime(double time) {
         this.time = time;
+        calculateTime();
     }
 
     public void setTitle(String title) {
@@ -101,7 +102,7 @@ public class Job {
 
 
     private void calculateTime(){
-        hoursWorked = time / 3600;
+        hoursWorked = time / 60;
         totalCharge = hoursWorked * billedPerHour;
     }
 

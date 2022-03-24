@@ -77,6 +77,7 @@ public class MainScreen{
                 dialog.pack();
                 dialog.setVisible(true);
                 pathLink.deleteData(activeJob);
+                updateJobDetails("");
             }
         });
         startButton.addActionListener(new ActionListener() {
@@ -104,7 +105,14 @@ public class MainScreen{
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(activeJob != null){
-                    activeJob.setTime(activeJob.getTime() + finishedTimerMinutes);
+                    pathLink.addTime(activeJob, (int) minutes);
+                    minutes = 0;
+                    updateTimerCount();
+                    updateJobDetails(activeJob.getTitle());
+                }else{
+                    NoJobSelected dialog = new NoJobSelected();
+                    dialog.pack();
+                    dialog.setVisible(true);
                 }
             }
         });
@@ -116,6 +124,7 @@ public class MainScreen{
             }
         });
     }
+
 
 
     public void setUp(){
@@ -131,6 +140,7 @@ public class MainScreen{
         jobInformationTextArea.setEditable(false);
         timerTimeTextField.setEditable(false);
         timerTimeTextField.setHorizontalAlignment(SwingConstants.CENTER);
+        updateTimerCount();
     }
     public void dataComboBoxRefresh(String[] entries){
 
@@ -153,11 +163,18 @@ public class MainScreen{
             refresh();
 
         }
+        else{
+            jobInformationTextArea.setText("");
+            refresh();
+        }
     }
 
     private void updateTimerCount(){
         String hours = String.valueOf((int) minutes / 60);
         String remainingMinutes = String.valueOf((int) minutes % 60);
+        if(Integer.valueOf(remainingMinutes) < 10) {
+            remainingMinutes = "0" + remainingMinutes;
+        }
         timerTimeTextField.setText(hours + ":" + remainingMinutes);
     }
 
@@ -182,10 +199,6 @@ public class MainScreen{
         };
 
         timer.schedule(task, 1000, 1000);
-    }
-
-    public static Boolean getActiveJobSession() {
-        return activeJobSession;
     }
 
     public void setPathLink(Main pathLink) {
