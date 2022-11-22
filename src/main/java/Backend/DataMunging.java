@@ -1,6 +1,7 @@
 package Backend;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 
 import java.io.*;
@@ -40,21 +41,31 @@ public class DataMunging {
     }
 
     //Pushes a dataset into JSON format.
-    public static boolean pushJSON(Dataset data){
-        Gson gson = new Gson();
-        File file = new File("./test.json");
+    public static boolean pushJSON(Dataset data) {
+        Gson gson = new GsonBuilder().create();
+        File file = new File("test.json");
+        Writer fileWriter;
+        try{
+            fileWriter = new FileWriter(file);
+        }catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
         //fails if it can't write data
         // (which should never happen, unless the entire
-        //  system becomes read-only)
-        try (FileWriter writer = new FileWriter(file)) {
-            gson.toJson(data, writer);
+        //  system becomes read-only, which means user has
+        // bigger fish to fry. Much bigger fish.)
+        try {
+            gson.toJson(data, fileWriter);
+            fileWriter.flush();
+            fileWriter.close();
             return true;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
     }
-
+}
 //Deprecated testing code, keeping here for posterity
 /*    public static void main(String[] args) throws IOException {
         File file = new File("./test.json");
@@ -74,4 +85,3 @@ public class DataMunging {
 
     }*/
 
-}

@@ -78,7 +78,7 @@ public class NewJob extends JDialog {
         }
 
         if(valid) {
-            newJob.setAll(titleInput.getText(), clientInput.getText(), hoursWorked, billedPerHour);
+            this.newJob.setAll(titleInput.getText(), clientInput.getText(), hoursWorked, billedPerHour);
             dispose();
         }else{
             createNewJobTextArea.setText("There's something wrong with the numbers you entered. Please check again.");

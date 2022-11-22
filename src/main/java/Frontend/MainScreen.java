@@ -1,3 +1,6 @@
+/* Code by Roo Case, personal project
+*  This class is way too big. It interfaces with JavaFX, but also contains code for internal workings, that would
+* be better contained in a smaller class.*/
 package Frontend;
 
 import Backend.DataMunging;
@@ -156,7 +159,7 @@ public class MainScreen{
     }
 
     private void updateJobDetails(String name){
-        activeJob = (DataMunging.pullJSON("test.json").fetch(name));
+        activeJob = (pathLink.fetchJob(name));
         if(activeJob != null) {
             String jobInfo = activeJob.toReadableString();
             jobInformationTextArea.setText(jobInfo);

@@ -44,7 +44,14 @@ public class Main {
         mainScreen.dataComboBoxRefresh(dataSetNames);
     }
 
+    Job fetchJob(String name){
+        //fetches job from the primary dataset
+        return data.fetch(name);
+    }
+
     public void dropdownData(Dataset inputData){
+        // refreshes dataset that appears in the dropdown menu
+
         if(dataSetNames == null) {
             dataSetNames = new String[inputData.length()];
         }else if(dataSetNames.length != inputData.length()) {
@@ -57,7 +64,6 @@ public class Main {
         }
         mainScreen.dataComboBoxRefresh(dataSetNames);
     }
-
 
     public void addData(Job newJob){
         data.add(newJob);
@@ -75,7 +81,7 @@ public class Main {
     }
 
     public void addTime(Job job, int time){
-        job.setTime(job.getTime() + time);
+        (data.fetch(job.getTitle())).setTime(job.getTime() + time);
         pushJSON(data);
     }
 

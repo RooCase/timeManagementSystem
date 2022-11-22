@@ -109,7 +109,7 @@ public class Job {
     public void setAll(String title, String client, Double hoursWorked, Double billedPerHour){
         this.title = title;
         this.client = client;
-        this.time = hoursWorked * 3600;
+        this.time = hoursWorked * 60;
         this.billedPerHour = billedPerHour;
         calculateTime();
     }
